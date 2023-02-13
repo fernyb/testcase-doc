@@ -16,8 +16,7 @@ function getFileSource(file) {
   });
 }
 
-function getCase(opts = {}) {
-  // -- get the describe() name for the given it()
+function getParentName(opts) {
   let describeName = null;
   let parent = opts.path.parentPath;
   while (parent) {
@@ -53,6 +52,12 @@ function getCase(opts = {}) {
     parent = parent.parentPath;
   }
 
+  return describeName;
+}
+
+function getCase(opts = {}) {
+  // -- get the describe() name for the given it()
+  const describeName = getParentName(opts);
   // --
 
   let testName;
