@@ -21,8 +21,30 @@ function getCase(opts = {}) {
   let describeName = null;
   let parent = opts.path.parentPath;
   while (parent) {
-    if (parent.node.type === "CallExpression") {
+    const describeSkipTest = (
+      parent.node.callee &&
+      parent.node.callee.type === "MemberExpression" &&
+      parent.node.callee.object.type === "Identifier" &&
+      (
+        parent.node.callee.object.name === "describe" ||
+        parent.node.callee.object.name === "context"
+      ) &&
+      parent.node.callee.property.type === "Identifier" &&
+      (
+        parent.node.callee.property.name === "skip" || 
+        parent.node.callee.property.name === "only"
+      )
+    );
+
+    const describeTest = (
+        parent.node.type === "CallExpression" &&
+        parent.node.callee.type === "Identifier" && 
+        (parent.node.callee.name === "describe" || parent.node.callee.name === "context")
+      );
+
+    if (describeTest || describeSkipTest) {
       describeName = parent.node.arguments[0].value;
+
       if (opts.itSkipTest === false && parent.node.callee.property) {
         opts.itSkipTest = parent.node.callee.property.type === "Identifier" && parent.node.callee.property.name === "skip";
       }
@@ -30,8 +52,10 @@ function getCase(opts = {}) {
     }
     parent = parent.parentPath;
   }
+
   // --
 
+  let testName;
   let testSuiteName;
   let testId;
   let testDescription;
@@ -58,12 +82,25 @@ function getCase(opts = {}) {
     })
   );
 
+  // get the test name
+  switch (opts.path.node.arguments[0].type) {
+    case "StringLiteral" :
+      testName = opts.path.node.arguments[0].value;
+      break;
+    case "TemplateLiteral" :
+      testName = BabelGenerator.default(opts.path.node.arguments[0]).code;
+      testName = testName.substring(1, testName.length).substring(0, testName.length - 2);
+      break;
+    default: 
+      testName = null;
+  }
+
   return {
     file: opts.relativeFile,
     skipped: opts.itSkipTest,
     id: testId,
     description: testDescription || describeName,
-    name: opts.path.node.arguments[0].value,
+    name: testName,
     suite: testSuiteName,
     steps: testSteps,
   };

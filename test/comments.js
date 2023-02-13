@@ -148,27 +148,94 @@ describe("TestCase Doc", () => {
   });
 
   it("when describe.skip all testcases become skip", async () => {
-    const filePattern = path.posix.join(path.resolve(__dirname), "..", "fixtures", "**", "Saturday", "*.ts");
+    const filePattern = path.posix.join(path.resolve(__dirname), "..", "fixtures", "**", "Saturday", "skipDescribe.ts");
     const results = await getTestCasesFromPattern(filePattern);
     const tcs = results.filter((r) => r.file === "fixtures/featureB/Saturday/skipDescribe.ts");
-
     assert.equal(tcs.length, 2);
 
+    const actualTCs = tcs.filter((t) => t.description === "Skip API Login");
+    assert(actualTCs.length, 2, "Expected to have 2 testcases with name description");
+
     const skippedTCs = tcs.filter((t) => t.skipped);
-    assert.equal(skippedTCs.length, 2);
+    assert.equal(skippedTCs.length, 2, "Expected testcases to be skipped");
+  });
+
+  it("when context.skip all testcases become skip", async () => {
+    const filePattern = path.posix.join(path.resolve(__dirname), "..", "fixtures", "**", "Saturday", "skipContext.ts");
+    const results = await getTestCasesFromPattern(filePattern);
+    const tcs = results.filter((r) => r.file === "fixtures/featureB/Saturday/skipContext.ts");
+
+    const nonskippedTCs = tcs.filter((t) => t.skipped === false);
+    assert.equal(nonskippedTCs.length, 1, "Expected one testcase to not be skipped");
+
+    const skippedTCs = tcs.filter((t) => t.skipped);
+    assert.equal(skippedTCs.length, 2, "Expected testcases to be skipped");
+    
+    const tc = skippedTCs[1];
+    assert.equal(tc.file, 'fixtures/featureB/Saturday/skipContext.ts');
+    assert.equal(tc.skipped, true);
+    assert.equal(tc.id, null);
+    assert.equal(tc.description, 'Skip Context API');
+    assert.equal(tc.name, 'send email');
+    assert.equal(tc.suite, null);
+    assert.equal(tc.steps[0], 'make request to POST /send-email to skip');
+    assert.equal(tc.steps[1], 'verify email account that email was received to skip');
+    assert.equal(tc.steps.length, 2);
   });
 
   it("when it.only", async () => {
     const filePattern = path.posix.join(path.resolve(__dirname), "..", "fixtures", "**", "Saturday", "*.ts");
     const results = await getTestCasesFromPattern(filePattern);
     const tcs = results.filter((r) => r.file === "fixtures/featureB/Saturday/onlyDescribe.ts");
+    const itTcs = tcs.filter((t) => t.description === "Only Describe");
 
     // when there is an it.only should all other tests be considered skipped?
     // I think the answer is yes, for now I will ignore...
 
-    assert.equal(tcs.length, 2);
+    assert.equal(itTcs.length, 2);
 
-    const skippedTCs = tcs.filter((t) => t.skipped);
+    const skippedTCs = itTcs.filter((t) => t.skipped);
     assert.equal(skippedTCs.length, 0);
+  });
+
+  it("when describe.only", async () => {
+    const filePattern = path.posix.join(path.resolve(__dirname), "..", "fixtures", "**", "Saturday", "*.ts");
+    const results = await getTestCasesFromPattern(filePattern);
+    const tcs = results.filter((r) => r.file === "fixtures/featureB/Saturday/onlyDescribe.ts");
+    const itTcs = tcs.filter((t) => t.name === "describe.only should be picked up");
+
+    assert.equal(itTcs.length, 1);
+
+    const tc = itTcs[0];
+
+    assert.equal(tc.file, 'fixtures/featureB/Saturday/onlyDescribe.ts');
+    assert.equal(tc.skipped, false);
+    assert.equal(tc.id, null);
+    assert.equal(tc.description, 'Describe.only');
+    assert.equal(tc.name, 'describe.only should be picked up');
+    assert.equal(tc.suite, null);
+    assert.equal(tc.steps[0], 'describe.only should be the description by default');
+    assert.equal(tc.steps[1], 'verify description');
+  });
+
+  it("Parameterized", async () => {
+    const filePattern = path.posix.join(path.resolve(__dirname), "..", "fixtures", "**", "Repeat", "*.ts");
+    const results = await getTestCasesFromPattern(filePattern);
+    const tcs = results.filter((r) => r.file === "fixtures/featureB/Repeat/loops.ts");
+    
+    assert.equal(tcs.length, 2);
+    const tc = tcs.find((t) => t.id === "Param001");
+
+    assert.equal(tc.file, "fixtures/featureB/Repeat/loops.ts");
+    assert.equal(tc.skipped, false);
+    assert.equal(tc.id, "Param001");
+    assert.equal(tc.description, "Loops - Parameterized");
+    assert.equal(tc.name, "send request with payload value \"${val}\"", "Test name");
+    assert.equal(tc.suite, null);
+    assert.equal(tc.steps[0], 'send http request POST /user/register');
+    assert.equal(tc.steps[1], 'payload must have new=true or new=false');
+    assert.equal(tc.steps[2], 'response should be status = 200');
+    assert.equal(tc.steps[3], 'verify new user is created');
+    assert.equal(tc.steps.length, 4);
   });
 });
