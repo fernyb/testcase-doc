@@ -10,4 +10,13 @@ describe("Loops - Parameterized", () => {
       // tc: verify new user is created
     });
   });
+
+const numbers = [1,2,3];
+for (var i = 0; i < numbers.length; i++) {
+  it(`verify for loop ${i}`, () => {
+    // tc-id: for-loop
+    // tc: verify it works
+    console.log(i);
+  });
+}
 });

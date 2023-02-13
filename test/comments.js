@@ -223,8 +223,8 @@ describe("TestCase Doc", () => {
     const results = await getTestCasesFromPattern(filePattern);
     const tcs = results.filter((r) => r.file === "fixtures/featureB/Repeat/loops.ts");
     
-    assert.equal(tcs.length, 2);
-    const tc = tcs.find((t) => t.id === "Param001");
+    assert.equal(tcs.length, 3);
+    let tc = tcs.find((t) => t.id === "Param001");
 
     assert.equal(tc.file, "fixtures/featureB/Repeat/loops.ts");
     assert.equal(tc.skipped, false);
@@ -237,5 +237,16 @@ describe("TestCase Doc", () => {
     assert.equal(tc.steps[2], 'response should be status = 200');
     assert.equal(tc.steps[3], 'verify new user is created');
     assert.equal(tc.steps.length, 4);
+
+    // forloop
+    tc = tcs.find((t) => t.id === "for-loop");
+    assert.equal(tc.file, "fixtures/featureB/Repeat/loops.ts");
+    assert.equal(tc.skipped, false);
+    assert.equal(tc.id, "for-loop");
+    assert.equal(tc.description, "Loops - Parameterized");
+    assert.equal(tc.name, "verify for loop ${i}", "Test name");
+    assert.equal(tc.suite, null);
+    assert.equal(tc.steps[0], 'verify it works');
+    assert.equal(tc.steps.length, 1);
   });
 });
