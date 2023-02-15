@@ -1,6 +1,13 @@
 import Excel from "exceljs";
 import fs from "fs";
 import path from "path";
+import Handlebars from "handlebars";
+
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const COLUMNS = ["id", "steps", "description", "name", "suite", "file"];
 
 function mkdirp(directoryPath) {
   if (!fs.existsSync(directoryPath)) {
@@ -30,7 +37,7 @@ function writeToXLSX(opts = {}) {
   });
 
   worksheet.properties.defaultRowHeight = 15;
-  worksheet.addRow(["id", "steps", "description", "name", "suite", "file"]);
+  worksheet.addRow(COLUMNS);
 
   opts.testcases.forEach((tc) => {
     const steps = tc.steps.join("\n");
@@ -72,8 +79,28 @@ function writeToXLSX(opts = {}) {
   });
 }
 
-function writeToHTML(testcases) {
+function writeToHTML(opts = {}) {
+  mkdirp(path.dirname(opts.filename));
 
+  return new Promise((resolve) => {
+    fs.readFile(`${__dirname}/templates/basic.html`, 'utf-8', (error, source) => {
+      Handlebars.registerHelper('steps', (steps) => {
+        const stepsHtml = steps.map((step) => `<span>${step}</span>`).join("<br/>");
+        return stepsHtml;
+      })
+
+      const template = Handlebars.compile(source);
+      const html = template({ headers: COLUMNS, testcases: opts.testcases });
+
+        fs.writeFile(opts.filename, html, (err) => {
+          if (err) throw err;
+          resolve({
+            filename: opts.filename,
+            testcases_count: opts.testcases.length
+          });
+        });
+    });
+  });
 }
 
 export default {

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>TestCase Doc</title>
+    <style>
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+      }
+      table {
+        border-collapse: collapse;
+      }
+      table thead {
+        border-bottom: 1px solid #333;
+      }
+      table * {
+        padding: 0px;
+        margin: 0px;
+      }
+      table tbody td {
+        border-bottom: 1px solid #ccc;
+        vertical-align: top;
+        padding: 5px;
+      }
+
+      table tbody tr td:not(:last-child) {
+        border-right: 1px solid #ddd;
+      }
+      .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: left;
+        min-width: 1500px;
+      }
+      .container table {
+        min-width: 1500px;
+      }
+      .header-text div {
+        font-size: 0.75em;
+        padding-bottom: 7px;
+        margin-bottom: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <table>
+        <thead>
+        <tr class="header-text">
+          <th colspan="6">
+            <div>
+              Test Cases: {{testcases.length}}
+            </div>
+          </th>
+        </tr>
+        <tr>
+        {{#each headers}}
+          <th>{{this}}</th>
+        {{/each}}
+        </tr>
+        </thead>
+        <tbody>
+        {{#each testcases}}
+          <tr>
+            <td>{{this.id}}</td>
+            <td>{{{steps this.steps}}}</td>
+            <td>{{this.description}}</td>
+            <td>{{this.name}}</td>
+            <td>{{this.suite}}</td>
+            <td>{{this.file}}</td>
+          </tr>
+        {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
