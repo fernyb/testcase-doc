@@ -82,28 +82,50 @@ function writeToXLSX(opts = {}) {
 function writeToHTML(opts = {}) {
   mkdirp(path.dirname(opts.filename));
 
-  return new Promise((resolve) => {
-    fs.readFile(`${__dirname}/templates/basic.html`, 'utf-8', (error, source) => {
-      Handlebars.registerHelper('steps', (steps) => {
-        const stepsHtml = steps.map((step) => `<span>${step}</span>`).join("<br/>");
-        return stepsHtml;
-      })
+  Handlebars.registerHelper('steps', (steps) => {
+    const stepsHtml = steps.map((step) => `<span>${step}</span>`).join("<br/>");
+    return stepsHtml;
+  })
 
-      const template = Handlebars.compile(source);
-      const html = template({ headers: COLUMNS, testcases: opts.testcases });
+  const getGeneratedHTML = () => {
+    return new Promise((resolve) => {
+      fs.readFile(`${__dirname}/templates/basic.html`, 'utf-8', (error, source) => {
+        const template = Handlebars.compile(source);
+        const html = template({ headers: COLUMNS, testcases: opts.testcases });
+        resolve(html);
+      });
+    });
+  };
 
-        fs.writeFile(opts.filename, html, (err) => {
-          if (err) throw err;
-          resolve({
-            filename: opts.filename,
-            testcases_count: opts.testcases.length
-          });
+  return getGeneratedHTML().then((html) => {
+    return new Promise((resolve) => {
+      fs.writeFile(opts.filename, html, (err) => {
+        if (err) throw err;
+        resolve({
+          filename: opts.filename,
+          testcases_count: opts.testcases.length
         });
+      });
+    });
+  });
+}
+
+function writeToJSON(opts = {}) {
+  mkdirp(path.dirname(opts.filename));
+
+  return new Promise((resolve) => {
+    fs.writeFile(opts.filename, JSON.stringify(opts.testcases, null, 2), (err) => {
+      if (err) throw err;
+      resolve({
+        filename: opts.filename,
+        testcases_count: opts.testcases.length
+      });
     });
   });
 }
 
 export default {
   writeToXLSX,
-  writeToHTML
+  writeToHTML,
+  writeToJSON
 }

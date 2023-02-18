@@ -1,7 +1,7 @@
+import fs from "fs";
 import report from "../src/report.js";
 
 import path from "path";
-import fs from "fs";
 import _ from "lodash";
 import assert from "assert";
 import jsdom from "jsdom";
@@ -81,5 +81,27 @@ describe("Write to HTML", () => {
     assert.equal(tds[5].textContent, "fixtures/featureA/Monday/API/api.ts");
 
     assert.equal(tds.length, 6);
+  });
+
+  it("write to file - error", async () => {
+    const filePattern = path.posix.join(path.resolve(__dirname), "..", "fixtures", "featureA", "Monday", "API", "api.ts");
+    const testcases = await getTestCasesFromPattern(filePattern);
+
+    const fsWriteFile = fs.writeFile;
+    fs.writeFile = (filename, html, callback) => {
+      assert.equal(filename, HTML_FILE);
+      assert.ok(html);
+      callback(new Error("fs.writeFile html failed"));
+    };
+
+    try {
+      await report.writeToHTML({ filename: HTML_FILE, testcases });
+      assert.fail("Expected fs.writeFile to throw an error");
+    } catch (err) {
+      assert.equal(err.message, "fs.writeFile html failed");
+    }
+    finally {
+      fs.writeFile = fsWriteFile;
+    }
   });
 });
