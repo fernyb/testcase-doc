@@ -7,7 +7,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const COLUMNS = ["id", "steps", "description", "name", "suite", "categories", "file"];
+const COLUMNS = ["id", "steps", "expected", "description", "name", "suite", "categories", "file"];
 
 function mkdirp(directoryPath) {
   if (!fs.existsSync(directoryPath)) {
@@ -44,6 +44,7 @@ function writeToXLSX(opts = {}) {
     const row = worksheet.addRow([
       tc.id,
       steps,
+      tc.expected,
       tc.description,
       tc.name,
       tc.suite,

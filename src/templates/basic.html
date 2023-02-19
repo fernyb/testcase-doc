@@ -25,6 +25,7 @@
         border-bottom: 1px solid #ccc;
         vertical-align: top;
         padding: 5px;
+        white-space: pre-wrap;
       }
 
       table tbody tr td:not(:last-child) {
@@ -69,6 +70,7 @@
           <tr>
             <td>{{this.id}}</td>
             <td>{{{steps this.steps}}}</td>
+            <td>{{this.expected}}</td>
             <td>{{this.description}}</td>
             <td>{{this.name}}</td>
             <td>{{this.suite}}</td>

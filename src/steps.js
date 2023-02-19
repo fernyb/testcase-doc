@@ -65,6 +65,7 @@ function getCase(opts = {}) {
   let testId;
   let testDescription;
   let testCategories = [];
+  let testExpected = [];
 
   const testSteps = _.compact(
     opts.generatedCode.split("\n").map((line) => {
@@ -89,6 +90,12 @@ function getCase(opts = {}) {
       const testCategory = testCategoriesMatches ? testCategoriesMatches[1] : null;
       if (testCategory) {
         testCategories.push(testCategory);
+      }
+
+      const testExpectedMatches = line.trim().match(/\/\/\stc-expected:\s(.*)$/);
+      const testExpectedValue = testExpectedMatches ? testExpectedMatches[1] : null;
+      if (testExpectedValue) {
+        testExpected.push(testExpectedValue);
       }
 
       return matches ? matches[1] : null;
@@ -117,6 +124,7 @@ function getCase(opts = {}) {
     suite: testSuiteName,
     steps: testSteps,
     categories: testCategories,
+    expected: testExpected.join("\n"),
   };
 }
 

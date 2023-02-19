@@ -22,11 +22,12 @@ function readXLSXFile(filename) {
       rows.push({
         id: row.values[1],
         steps: row.values[2],
-        description: row.values[3],
-        name: row.values[4],
-        suite: row.values[5],
-        categories: row.values[6],
-        file: row.values[7],
+        expected: row.values[3],
+        description: row.values[4],
+        name: row.values[5],
+        suite: row.values[6],
+        categories: row.values[7],
+        file: row.values[8],
       });
     });
     rows.shift();
@@ -66,12 +67,15 @@ describe("Write to XLSX", () => {
     assert.equal(res.testcases_count, testcases.length);
     assert.equal(rows.length, testcases.length, "Expected to have same number of testcases");
 
+    assert.equal(rows[0].expected, "10 items in response\neach item has id, name, and description");
+
     const row = rows[1];
     assert.equal(row.id, "TC999");
     assert.equal(row.steps, [
       "Add a new item to collection",
       "verify new item has been added",
       "Step name, will match inline with code"].join("\n"));
+    assert.equal(row.expected, "");
     assert.equal(row.description, "POST");
     assert.equal(row.name, "POST /add");
     assert.equal(row.suite, "API inline");

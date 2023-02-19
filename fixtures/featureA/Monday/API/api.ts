@@ -7,6 +7,8 @@ describe("API Endpoints", { tags: "@SMOKE" }, () => {
       // tc: verify 10 items in response
       // tc-category: API
       // tc-category: featureA
+      // tc-expected: 10 items in response
+      // tc-expected: each item has id, name, and description
     });
   });
 
@@ -31,6 +33,7 @@ describe("API Endpoints", { tags: "@SMOKE" }, () => {
       // tc-description: POST /add/vehicle?id=100 with payload
       // tc-category: featureA
       // tc-category: API
+      // tc-expected: For new vehicle to be added
     });
   });
 });

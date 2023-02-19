@@ -46,16 +46,19 @@ describe("Write to JSON", () => {
     const json = readJSONFile();
 
     const headers = _.keys(json[0]);
-    assert.equal(headers.length, 8);
+    assert.equal(headers.length, 9);
     headers.forEach(header => {
-      const headerIsIncluded = ["id", "file", "steps", "description", "name", "suite", "file", "skipped", "categories"].includes(header);
-      assert.equal(headerIsIncluded, true, `Expected header to be one of: file, steps, description, name, suite, file, skipped, categories but was: ${header}`);
+      const headerIsIncluded = ["id", "file", "steps", "expected", "description", "name", "suite", "file", "skipped", "categories"].includes(header);
+      assert.equal(headerIsIncluded, true, `Expected header to be one of: file, steps, expected, description, name, suite, file, skipped, categories but was: ${header}`);
     });
+
+    assert.equal(json[0].expected, "10 items in response\neach item has id, name, and description");
 
     assert.equal(json[1].file, "fixtures/featureA/Monday/API/api.ts");
     assert.equal(json[1].skipped, false);
     assert.equal(json[1].id, "TC999");
     assert.equal(json[1].description, "POST");
+    assert.equal(json[1].expected, "");
     assert.equal(json[1].name, "POST /add");
     assert.equal(json[1].suite, "API inline");
     assert.equal(json[1].steps.length, 3);

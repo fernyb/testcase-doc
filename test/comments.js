@@ -250,7 +250,7 @@ describe("TestCase Doc", () => {
     assert.equal(tc.steps.length, 1);
   });
 
-  it("verify test case categories", async () => {
+  it("verify test case categories property", async () => {
     const filePattern = path.posix.join(path.resolve(__dirname), "..", "fixtures", "**", "*.ts");
     const excludePattern = path.posix.join(path.resolve(__dirname), "..", "fixtures", "**", "Exceptions", "*.ts");
     const results = await getTestCasesFromPattern([filePattern, `!${excludePattern}`]);
@@ -269,4 +269,24 @@ describe("TestCase Doc", () => {
     assert.equal(tc.categories.length, 3);
   });
 
+  it("verify test case expected property", async () => {
+    const filePattern = path.posix.join(path.resolve(__dirname), "..", "fixtures", "**", "*.ts");
+    const excludePattern = path.posix.join(path.resolve(__dirname), "..", "fixtures", "**", "Exceptions", "*.ts");
+    const results = await getTestCasesFromPattern([filePattern, `!${excludePattern}`]);
+
+    results.forEach((r) => {
+      assert.equal(r.hasOwnProperty("expected"), true, `Expected property "expected" on ${r.file}`);
+    });
+
+    let tc = results.find((r) => r.file === "fixtures/featureB/Saturday/login.ts" && r.name === "can login via API on saturdays");
+    assert.ok(tc.expected, "Expected not to be empty string"); 
+    assert.equal(tc.expected, "user receives login header token");
+
+    tc = results.find((r) => r.file === "fixtures/featureB/Saturday/login.ts" && r.name === "send email");
+    assert.ok(tc.expected, "Expected not to be empty string");
+    assert.equal(tc.expected, "email should be sent\nemail should be received");
+
+    tc = results.find((r) => r.file === "fixtures/featureB/Saturday/login.ts" && r.name === "can register");
+    assert.equal(tc.expected, "", "Expected to be empty string");
+  });
 });

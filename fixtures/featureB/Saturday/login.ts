@@ -4,6 +4,7 @@ describe("API Login", () => {
     // tc-category: featureB
     // tc-category: login
     // tc-category: api
+    // tc-expected: user receives login header token
   });
 
   // tc: should not be picked up 1
@@ -26,5 +27,7 @@ describe("API Login", () => {
     // tc: verify email account that email was received
     // tc-category: featureB
     // tc-category: login
+    // tc-expected: email should be sent
+    // tc-expected: email should be received
   });
 });
