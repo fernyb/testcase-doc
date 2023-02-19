@@ -46,10 +46,10 @@ describe("Write to JSON", () => {
     const json = readJSONFile();
 
     const headers = _.keys(json[0]);
-    assert.equal(headers.length, 7);
+    assert.equal(headers.length, 8);
     headers.forEach(header => {
-      const headerIsIncluded = ["id", "file", "steps", "description", "name", "suite", "file", "skipped"].includes(header);
-      assert.equal(headerIsIncluded, true, `Expected header to be one of: file, steps, description, name, suite, file, skipped but was: ${header}`);
+      const headerIsIncluded = ["id", "file", "steps", "description", "name", "suite", "file", "skipped", "categories"].includes(header);
+      assert.equal(headerIsIncluded, true, `Expected header to be one of: file, steps, description, name, suite, file, skipped, categories but was: ${header}`);
     });
 
     assert.equal(json[1].file, "fixtures/featureA/Monday/API/api.ts");
@@ -62,6 +62,9 @@ describe("Write to JSON", () => {
     assert.equal(json[1].steps[0], "Add a new item to collection");
     assert.equal(json[1].steps[1], "verify new item has been added");
     assert.equal(json[1].steps[2], "Step name, will match inline with code");
+    assert.equal(json[1].categories.length, 2);
+    assert.equal(json[1].categories[0], "API");
+    assert.equal(json[1].categories[1], "featureA");
   });
 
   it("write to file - error", async () => {

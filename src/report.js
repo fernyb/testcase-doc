@@ -7,7 +7,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const COLUMNS = ["id", "steps", "description", "name", "suite", "file"];
+const COLUMNS = ["id", "steps", "description", "name", "suite", "categories", "file"];
 
 function mkdirp(directoryPath) {
   if (!fs.existsSync(directoryPath)) {
@@ -47,6 +47,7 @@ function writeToXLSX(opts = {}) {
       tc.description,
       tc.name,
       tc.suite,
+      tc.categories.join("\n"),
       tc.file
     ]);
 
@@ -83,9 +84,12 @@ function writeToHTML(opts = {}) {
   mkdirp(path.dirname(opts.filename));
 
   Handlebars.registerHelper('steps', (steps) => {
-    const stepsHtml = steps.map((step) => `<span>${step}</span>`).join("<br/>");
-    return stepsHtml;
-  })
+    return steps.map((step) => `<span>${step}</span>`).join("<br/>");
+  });
+
+  Handlebars.registerHelper('categories', (categories) => {
+    return categories.map((category) => `<span>${category}</span>`).join("<br/>");
+  });
 
   const getGeneratedHTML = () => {
     return new Promise((resolve) => {

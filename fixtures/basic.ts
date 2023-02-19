@@ -21,6 +21,7 @@ describe("First Test", { tags: ["@SMOKE"] }, () => {
     //tc: the end
     // tc:  the end
     // tc-suite: First Test
+    // tc-category: featureB
   });
 });
 
@@ -29,6 +30,7 @@ describe("Person", () => {
     const pagination = () => {
       console.log("Pagination Function");
       // tc: Pagination test case...
+      // tc-category: featureB
     };
 
     // tc: create a new person
@@ -47,6 +49,7 @@ describe("Person", () => {
   it("2. can say hello", () => {
     // tc: test case for hello 2
     console.log("does it work?");
+    // tc-category: featureB
   });
 
   describe("Nested Describe", () => {
@@ -64,6 +67,7 @@ describe("Person", () => {
         // tc: begin
         // tc: double nested test case name
         // tc: end
+        // tc-category: nested
       });
 
       describe("Tripple Nested", () => {
@@ -72,6 +76,7 @@ describe("Person", () => {
           // tc: create new user
           // tc: book a job
           // tc: Hello World
+          // tc-category: nested
         });
       });
     });

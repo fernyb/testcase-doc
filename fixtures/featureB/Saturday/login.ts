@@ -1,6 +1,9 @@
 describe("API Login", () => {
   it("can login via API on saturdays", () => {
     // tc: make a POST /login request with payload containing username, password
+    // tc-category: featureB
+    // tc-category: login
+    // tc-category: api
   });
 
   // tc: should not be picked up 1
@@ -13,10 +16,15 @@ describe("API Login", () => {
     // tc: verify user exists by making reqeust to GET /find
     // tc: make request to GET /find?userid=999
     // tc: verify response for GET /find?userid=999
+    // tc-category: featureB
+    // tc-category: login
+    // tc-category: api
   })
 
   it.skip("send email", () => {
     // tc: make request to POST /send-email
     // tc: verify email account that email was received
+    // tc-category: featureB
+    // tc-category: login
   });
 });

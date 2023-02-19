@@ -50,13 +50,14 @@ describe("Write to HTML", () => {
 
     // verify header column names
     const th = document.querySelectorAll("table thead tr:last-child th");
-    assert.equal(th.length, 6);
+    assert.equal(th.length, 7);
     assert.equal(th[0].textContent, "id");
     assert.equal(th[1].textContent, "steps");
     assert.equal(th[2].textContent, "description");
     assert.equal(th[3].textContent, "name");
     assert.equal(th[4].textContent, "suite");
-    assert.equal(th[5].textContent, "file");
+    assert.equal(th[5].textContent, "categories");
+    assert.equal(th[6].textContent, "file");
 
     // verify html test cases
     const trNodes = document.querySelectorAll("table tbody tr");
@@ -64,6 +65,7 @@ describe("Write to HTML", () => {
     const tr = trNodes[1];
     const tds = tr.querySelectorAll("td");
     const spans = tds[1].querySelectorAll("span");
+    const categorySpans = tds[5].querySelectorAll("span");
 
     assert.equal(trNodes.length, 3);
     assert.equal(trNodes.length, res.testcases_count);
@@ -78,9 +80,13 @@ describe("Write to HTML", () => {
     assert.equal(tds[2].textContent, "POST");
     assert.equal(tds[3].textContent, "POST /add");
     assert.equal(tds[4].textContent, "API inline");
-    assert.equal(tds[5].textContent, "fixtures/featureA/Monday/API/api.ts");
 
-    assert.equal(tds.length, 6);
+    assert.equal(categorySpans[0].textContent, "API");
+    assert.equal(categorySpans[1].textContent, "featureA");
+
+    assert.equal(tds[6].textContent, "fixtures/featureA/Monday/API/api.ts");
+
+    assert.equal(tds.length, 7);
   });
 
   it("write to file - error", async () => {

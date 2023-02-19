@@ -5,6 +5,8 @@ describe("API Endpoints", { tags: "@SMOKE" }, () => {
       // tc: GET collections for endpoint /endpoint1
       // tc: verify response has the following items
       // tc: verify 10 items in response
+      // tc-category: API
+      // tc-category: featureA
     });
   });
 
@@ -17,6 +19,8 @@ describe("API Endpoints", { tags: "@SMOKE" }, () => {
       console.log("Hello World");// tc: Step name, will match inline with code
       console.log("Hello World");//tc: Step name, will not match
       // tc-suite: API inline
+      // tc-category: API
+      // tc-category: featureA
     });
 
     it("POST /add/vehicle", () => {
@@ -25,6 +29,8 @@ describe("API Endpoints", { tags: "@SMOKE" }, () => {
       // tc: Add new vehicle to element id
       // tc: verify new vehicle was added
       // tc-description: POST /add/vehicle?id=100 with payload
+      // tc-category: featureA
+      // tc-category: API
     });
   });
 });

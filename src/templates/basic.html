@@ -5,12 +5,17 @@
     <style>
       body {
         font-family: Arial, Helvetica, sans-serif;
+        font-size: 0.75em;
       }
       table {
         border-collapse: collapse;
       }
       table thead {
         border-bottom: 1px solid #333;
+      }
+      table thead th {
+        padding: 5px;
+        text-align: left;
       }
       table * {
         padding: 0px;
@@ -37,7 +42,6 @@
         min-width: 1500px;
       }
       .header-text div {
-        font-size: 0.75em;
         padding-bottom: 7px;
         margin-bottom: 5px;
       }
@@ -68,6 +72,7 @@
             <td>{{this.description}}</td>
             <td>{{this.name}}</td>
             <td>{{this.suite}}</td>
+            <td>{{{categories this.categories}}}</td>
             <td>{{this.file}}</td>
           </tr>
         {{/each}}

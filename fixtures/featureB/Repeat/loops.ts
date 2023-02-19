@@ -8,6 +8,7 @@ describe("Loops - Parameterized", () => {
       // tc: payload must have new=true or new=false
       // tc: response should be status = 200
       // tc: verify new user is created
+      // tc-category: featureB
     });
   });
 
@@ -17,6 +18,7 @@ for (var i = 0; i < numbers.length; i++) {
     // tc-id: for-loop
     // tc: verify it works
     console.log(i);
+    // tc-category: featureB
   });
 }
 });

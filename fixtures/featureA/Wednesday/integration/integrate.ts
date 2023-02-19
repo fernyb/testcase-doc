@@ -9,6 +9,7 @@ describe("Integration test", () => {
     // tc: click row having name 'Terry'
     // tc: modal should open
     // tc: verify modal has the name 'Terry Kennedy'
+    // tc-category: featureA
   });
 
   it("verify modal UI", function verifyModalUI() {
@@ -18,5 +19,6 @@ describe("Integration test", () => {
     // tc: verify status is pending
     // tc: click close button
     // tc: verify modal is no longer visible
+    // tc-category: featureA
   });
 });

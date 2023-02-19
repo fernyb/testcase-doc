@@ -25,7 +25,8 @@ function readXLSXFile(filename) {
         description: row.values[3],
         name: row.values[4],
         suite: row.values[5],
-        file: row.values[6],
+        categories: row.values[6],
+        file: row.values[7],
       });
     });
     rows.shift();
@@ -74,6 +75,10 @@ describe("Write to XLSX", () => {
     assert.equal(row.description, "POST");
     assert.equal(row.name, "POST /add");
     assert.equal(row.suite, "API inline");
+    assert.equal(row.categories, [
+      "API",
+      "featureA",
+    ].join("\n"));
     assert.equal(row.file, "fixtures/featureA/Monday/API/api.ts");
   });
 });

@@ -249,4 +249,24 @@ describe("TestCase Doc", () => {
     assert.equal(tc.steps[0], 'verify it works');
     assert.equal(tc.steps.length, 1);
   });
+
+  it("verify test case categories", async () => {
+    const filePattern = path.posix.join(path.resolve(__dirname), "..", "fixtures", "**", "*.ts");
+    const excludePattern = path.posix.join(path.resolve(__dirname), "..", "fixtures", "**", "Exceptions", "*.ts");
+    const results = await getTestCasesFromPattern([filePattern, `!${excludePattern}`]);
+
+    results.forEach((r) => {
+      assert.equal(Array.isArray(r.categories), true);
+    });
+
+    const tcs = results.filter((r) => r.file === "fixtures/featureB/Saturday/login.ts" && r.categories.length === 3);
+    assert.equal(tcs.length, 2, "Expected two test case having 3 categories");
+
+    const [tc] = tcs;
+    assert.equal(tc.categories[0], "featureB");
+    assert.equal(tc.categories[1], "login");
+    assert.equal(tc.categories[2], "api");
+    assert.equal(tc.categories.length, 3);
+  });
+
 });

@@ -9,6 +9,7 @@ describe("Authentication", () => {
       // tc: click submit button
       // tc: page should redirect to user profile
       // tc: verify page is user profile
+      // tc-category: featureA
     })
   });
 });

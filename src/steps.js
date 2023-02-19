@@ -64,6 +64,8 @@ function getCase(opts = {}) {
   let testSuiteName;
   let testId;
   let testDescription;
+  let testCategories = [];
+
   const testSteps = _.compact(
     opts.generatedCode.split("\n").map((line) => {
       const matches = line.trim().match(/\/\/\stc:\s(.*)$/);
@@ -81,6 +83,12 @@ function getCase(opts = {}) {
       if (!testDescription) {
         const testDescriptionMatches = line.trim().match(/\/\/\stc-description:\s(.*)$/);
         testDescription = testDescriptionMatches ? testDescriptionMatches[1] : null;
+      }
+
+      const testCategoriesMatches = line.trim().match(/\/\/\stc-category:\s(.*)$/);
+      const testCategory = testCategoriesMatches ? testCategoriesMatches[1] : null;
+      if (testCategory) {
+        testCategories.push(testCategory);
       }
 
       return matches ? matches[1] : null;
@@ -108,6 +116,7 @@ function getCase(opts = {}) {
     name: testName,
     suite: testSuiteName,
     steps: testSteps,
+    categories: testCategories,
   };
 }
 
