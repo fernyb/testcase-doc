@@ -1,7 +1,7 @@
 {
   "name": "testcase-doc",
   "version": "1.0.0",
-  "description": "Generate test case documentation from tests",
+  "description": "Generate test case documentation from mocha tests",
   "main": "index.js",
   "bin": {
     "testcase-doc": "./bin/testcase-doc.js"
@@ -24,7 +24,6 @@
     "@babel/plugin-transform-typescript": "^7.20.13",
     "@babel/traverse": "^7.20.13",
     "exceljs": "^4.3.0",
-    "glob": "^8.1.0",
     "globby": "^13.1.3",
     "handlebars": "^4.7.7",
     "lodash": "^4.17.21",
