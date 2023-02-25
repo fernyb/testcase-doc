@@ -1,6 +1,6 @@
 {
   "name": "testcase-doc",
-  "version": "1.0.0",
+  "version": "1.1",
   "description": "Generate test case documentation from mocha tests",
   "homepage": "https://github.com/fernyb/testcase-doc",
   "main": "index.js",
