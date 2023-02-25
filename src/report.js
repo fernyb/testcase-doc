@@ -2,6 +2,7 @@ import Excel from "exceljs";
 import fs from "fs";
 import path from "path";
 import Handlebars from "handlebars";
+import Table from "cli-table";
 
 import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
@@ -129,8 +130,40 @@ function writeToJSON(opts = {}) {
   });
 }
 
+function writeToCLI(opts = {}) {
+  return new Promise((resolve) => {
+    const table = new Table(
+      {
+        head: COLUMNS,
+        colWidths: [5, 50, 30, 30, 30, 10, 15, 50],
+      }
+    );
+
+    opts.testcases.forEach((tc) => {
+      table.push([
+        tc.id || "",
+        tc.steps.join("\n"),
+        tc.expected || "",
+        tc.description || "",
+        tc.name || "",
+        tc.suite || "",
+        tc.categories.join("\n"),
+        tc.file
+      ]);
+    });
+
+    const result = table.toString();
+    console.log(result);
+    resolve({
+      filename: opts.filename,
+      testcases_count: opts.testcases.length
+    });
+  });
+}
+
 export default {
   writeToXLSX,
   writeToHTML,
-  writeToJSON
+  writeToJSON,
+  writeToCLI,
 }

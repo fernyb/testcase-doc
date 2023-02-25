@@ -25,7 +25,14 @@ const options = yargs(process.argv.slice(2))
   .option('xlsx', {
     describe: 'Generate XLSX testcases report',
   })
-  .epilog('Example: $0 -f tests/{API,Integ,E2E}/**/*.js --json --html --xlsx')
+  .option('cli', {
+    describe: 'Print testcases report to CLI',
+  })
+  .option("category", {
+    alias: "c",
+    describe: "Category to filter testcases by",
+  })
+  .epilog('Example: $0 -f "tests/{API,Integ,E2E}/**/*.js" --json --html --xlsx')
   .help('h')
   .alias('h', 'help')
   .wrap(130)
@@ -44,6 +51,13 @@ function run() {
 
     getTestCasesFromPattern(pattern).then((testcases) => {
       const reports = [];
+      if (options.category && typeof options.category === 'string') {
+        testcases = testcases.filter((tc) => tc.categories.includes(options.category));
+      }
+      else if (options.category && Array.isArray(options.category)) {
+        testcases = testcases.filter((tc) => tc.categories.some((c) => options.category.includes(c)));
+      }
+
       if (options.json) {
         reports.push(report.writeToJSON({
           filename: `${options.out}/testcases.json`,
@@ -65,14 +79,20 @@ function run() {
         }));
       }
 
+      if (options.cli) {
+        reports.push(report.writeToCLI({ testcases }));
+      }
+
       if (reports.length === 0) {
-        console.log('No reports generated. Please specify at least one of --json, --html, --xlsx');
+        console.log('No reports generated. Please specify at least one of --json, --html, --xlsx, --cli');
         return;
       }
 
       Promise.all(reports).then((results) => {
         results.forEach((result) => {
-          console.log(`Report generated: ${result.filename} (${result.testcases_count} testcases)`);
+          if (result && result.filename) {
+            console.log(`Report generated: ${result.filename} (${result.testcases_count} testcases)`);
+          }
         });
       });
     });
