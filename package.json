@@ -2,6 +2,7 @@
   "name": "testcase-doc",
   "version": "1.0.0",
   "description": "Generate test case documentation from mocha tests",
+  "homepage": "https://github.com/fernyb/testcase-doc",
   "main": "index.js",
   "bin": {
     "testcase-doc": "./bin/testcase-doc.js"
@@ -16,6 +17,10 @@
     "jsdoc",
     "testcase-doc"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:fernyb/testcase-doc.git"
+  },
   "author": "Fernando Barajas",
   "license": "ISC",
   "dependencies": {
